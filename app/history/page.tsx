@@ -53,9 +53,9 @@ export default function HistoryPage() {
         onClick={() => router.push(`/history/${record.date}`)}
     >
       <td className="border p-3">{record.date}</td>
-      <td className="border p-3">₹ {record.fuel_total}</td>
-      <td className="border p-3">₹ {record.oil_total}</td>
-      <td className="border p-3">₹ {record.difference}</td>
+      <td className="border p-3">₹ {Number(record.fuel_total).toFixed(2)}</td>
+      <td className="border p-3">₹ {Number(record.oil_total).toFixed(2)}</td>
+      <td className="border p-3">₹ {Number(record.difference).toFixed(2)}</td>
       <td className="border p-3">{record.status}</td>
     </tr>
   ))}

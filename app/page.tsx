@@ -38,18 +38,48 @@ export default function Home() {
   const [data, setData] = useState(allNozzles);
 
   useEffect(() => {
-  const savedClosings = localStorage.getItem("previousClosings");
+  const fetchPreviousClosings = async () => {
+    const { data: readings, error } = await supabase
+      .from("nozzle_readings")
+      .select("id, closing")
+      .order("created_at", { ascending: false });
 
-  if (savedClosings) {
-    const parsed = JSON.parse(savedClosings);
+    if (error) {
+      console.error(error);
+      return;
+    }
 
-    const updatedData = allNozzles.map((item) => {
-      const found = parsed.find((p: any) => p.id === item.id);
-      return found ? { ...item, opening: found.closing } : item;
-    });
+    if (readings && readings.length > 0) {
+      const updatedData = allNozzles.map((item) => {
+        const found = readings.find((r: any) => r.id === item.id);
+        return found ? { ...item, opening: found.closing } : item;
+      });
 
-    setData(updatedData);
-  }
+      setData(updatedData);
+    }
+  };
+
+  fetchPreviousClosings();
+}, []);
+
+useEffect(() => {
+  const fetchLatestRates = async () => {
+    const { data, error } = await supabase
+      .from("daily_register")
+      .select("ms_rate, hsd_rate, speed_rate")
+      .order("date", { ascending: false })
+      .limit(1);
+
+    if (data && data.length > 0) {
+      setRates({
+        MS: data[0].ms_rate,
+        HSD: data[0].hsd_rate,
+        Speed: data[0].speed_rate,
+      });
+    }
+  };
+
+  fetchLatestRates();
 }, []);
 
   const [oilItems, setOilItems] = useState([
@@ -144,17 +174,26 @@ const saveDayData = async () => {
 
   if (!confirmSave) return;
 
+  const roundedFuelTotal = Number(grandTotal.toFixed(2));
+const roundedOilTotal = Number(oilTotal.toFixed(2));
+const roundedExpectedTotal = Number(expectedTotal.toFixed(2));
+const roundedTotalReceived = Number(totalReceived.toFixed(2));
+const roundedDifference = Number(difference.toFixed(2));
+
   // Insert daily register summary
 const { error: dailyError } = await supabase
   .from("daily_register")
   .insert([
     {
       date: selectedDate,
-      fuel_total: grandTotal,
-      oil_total: oilTotal,
-      expected_total: expectedTotal,
-      total_received: totalReceived,
-      difference: difference,
+      fuel_total: roundedFuelTotal,
+      oil_total: roundedOilTotal,
+      expected_total: roundedExpectedTotal,
+      total_received: roundedTotalReceived,
+      difference: roundedDifference,
+      ms_rate: rates.MS,
+      hsd_rate: rates.HSD,
+      speed_ratea: rates.Speed,
       status:
         difference === 0
           ? "Balanced"
@@ -413,7 +452,9 @@ if (expenseRows.length > 0) {
                 type="number"
                 className="border p-2 rounded bg-gray-100"
                 value={item.opening}
-                readOnly
+                onChange={(e)=>
+                  handleChange(realIndex, "opening", e.target.value)
+                }
                 />
 
                 <input
