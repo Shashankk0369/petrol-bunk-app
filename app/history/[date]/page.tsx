@@ -36,7 +36,7 @@ const { data: dayData, error: dayError } = await supabase
   .from("daily_register")
   .select("ms_rate, hsd_rate, speed_rate")
   .eq("date", String(date))
-  .single();
+  .maybeSingle();
 
 if (dayError) {
   console.error(dayError);
