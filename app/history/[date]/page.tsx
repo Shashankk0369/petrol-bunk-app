@@ -14,6 +14,12 @@ export default function DayDetails() {
   const [receipts, setReceipts] = useState<any[]>([]);
   const [expenses, setExpenses] = useState<any[]>([]);
 
+  const [fuelPrice, setFuelPrice] = useState({
+  MS: 0,
+  HSD: 0,
+  Speed: 0,
+});
+
   useEffect(() => {
     fetchDetails();
   }, []);
@@ -29,17 +35,17 @@ export default function DayDetails() {
 const { data: dayData, error: dayError } = await supabase
   .from("daily_register")
   .select("ms_rate, hsd_rate, speed_rate")
-  .eq("date", params.date)
+  .eq("date", String(date))
   .single();
 
 if (dayError) {
   console.error(dayError);
 }
-const fuelPrice = {
+setFuelPrice({
   MS: dayData?.ms_rate || 0,
   HSD: dayData?.hsd_rate || 0,
   Speed: dayData?.speed_rate || 0,
-};  
+});
 
     // Oil data
     const { data: oilData } = await supabase
@@ -95,7 +101,7 @@ const difference = totalReceipts - (totalFuel + totalOil);
 const handleUpdate = async () => {
   for (const nozzle of nozzles) {
     const net = nozzle.closing - nozzle.opening - nozzle.testing;
-    const amount = net * fuelPrice[nozzle.fuel_type];
+    const amount = net * fuelPrice[nozzle.fuel_type as keyof typeof fuelPrice];
 
     const { error } = await supabase
       .from("nozzle_readings")
