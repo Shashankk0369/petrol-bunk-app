@@ -25,6 +25,22 @@ export default function DayDetails() {
       .select("*")
       .eq("date", date);
 
+    // Fetch rates for that day
+const { data: dayData, error: dayError } = await supabase
+  .from("daily_register")
+  .select("ms_rate, hsd_rate, speed_rate")
+  .eq("date", params.date)
+  .single();
+
+if (dayError) {
+  console.error(dayError);
+}
+const fuelPrice = {
+  MS: dayData?.ms_rate || 0,
+  HSD: dayData?.hsd_rate || 0,
+  Speed: dayData?.speed_rate || 0,
+};  
+
     // Oil data
     const { data: oilData } = await supabase
       .from("oil_sales")
@@ -74,11 +90,7 @@ const totalReceipts = receipts.reduce(
 
 const difference = totalReceipts - (totalFuel + totalOil);
 
-const fuelPrice: Record<string, number> = {
-  MS: 102,
-  HSD: 95,
-  Speed: 110,
-};
+
 
 const handleUpdate = async () => {
   for (const nozzle of nozzles) {
