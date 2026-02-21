@@ -72,9 +72,9 @@ useEffect(() => {
 
     if (data && data.length > 0) {
       setRates({
-        MS: data[0].ms_rate,
-        HSD: data[0].hsd_rate,
-        Speed: data[0].speed_rate,
+        MS: data[0].ms_rate ?? "",
+        HSD: data[0].hsd_rate ?? "",
+        Speed: data[0].speed_rate ?? "",
       });
     }
   };
@@ -193,7 +193,7 @@ const { error: dailyError } = await supabase
       difference: roundedDifference,
       ms_rate: rates.MS,
       hsd_rate: rates.HSD,
-      speed_ratea: rates.Speed,
+      speed_rate: rates.Speed,
       status:
         difference === 0
           ? "Balanced"
@@ -374,12 +374,12 @@ if (expenseRows.length > 0) {
         type="number"
         step="0.01"
         className="border p-2 rounded w-32"
-        value={rates.MS}
+        value={rates.MS ?? ""}
         onChange={(e) =>
           setRates({ ...rates, MS: e.target.value })
         }
       />
-    </div>
+    </div> 
 
     <div>
       <label className="block font-semibold mb-2">HSD Rate</label>
@@ -387,7 +387,7 @@ if (expenseRows.length > 0) {
         type="number"
         step="0.01"
         className="border p-2 rounded w-32"
-        value={rates.HSD}
+        value={rates.HSD ?? ""}
         onChange={(e) =>
           setRates({ ...rates, HSD: e.target.value })
         }
@@ -400,7 +400,7 @@ if (expenseRows.length > 0) {
         type="number"
         step="0.01"
         className="border p-2 rounded w-32"
-        value={rates.Speed}
+        value={rates.Speed ?? ""}
         onChange={(e) =>
           setRates({ ...rates, Speed: e.target.value })
         }
