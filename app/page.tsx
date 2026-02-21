@@ -373,6 +373,7 @@ if (expenseRows.length > 0) {
       <input
         type="number"
         step="0.01"
+        autoComplete="off"
         className="border p-2 rounded w-32"
         value={rates.MS ?? ""}
         onChange={(e) =>
@@ -386,6 +387,7 @@ if (expenseRows.length > 0) {
       <input
         type="number"
         step="0.01"
+        autoComplete="off"
         className="border p-2 rounded w-32"
         value={rates.HSD ?? ""}
         onChange={(e) =>
@@ -399,6 +401,7 @@ if (expenseRows.length > 0) {
       <input
         type="number"
         step="0.01"
+        autoComplete="off"
         className="border p-2 rounded w-32"
         value={rates.Speed ?? ""}
         onChange={(e) =>
@@ -451,6 +454,7 @@ if (expenseRows.length > 0) {
                 <input
                 type="number"
                 className="border p-2 rounded bg-gray-100"
+                autoComplete="off"
                 value={item.opening}
                 onChange={(e)=>
                   handleChange(realIndex, "opening", e.target.value)
@@ -460,6 +464,7 @@ if (expenseRows.length > 0) {
                 <input
                   type="number"
                   className="border p-2 rounded"
+                  autoComplete="off"
                   value={item.closing}
                   onChange={(e) =>
                     handleChange(realIndex, "closing", e.target.value)
@@ -469,6 +474,7 @@ if (expenseRows.length > 0) {
                 <input
                   type="number"
                   className="border p-2 rounded"
+                  autoComplete="off"
                   value={item.testing}
                   onChange={(e) =>
                     handleChange(realIndex, "testing", e.target.value)
@@ -502,6 +508,7 @@ if (expenseRows.length > 0) {
         type="text"
         placeholder="Oil Particular"
         className="border p-1 rounded flex-1"
+        autoComplete="off"
         value={item.particular}
         onChange={(e) => {
           const updated = [...oilItems];
@@ -514,6 +521,7 @@ if (expenseRows.length > 0) {
         type="number"
         placeholder="Qty"
         className="border p-1 rounded w-24"
+        autoComplete="off"
         value={item.quantity}
         onChange={(e) => {
           const updated = [...oilItems];
@@ -526,6 +534,7 @@ if (expenseRows.length > 0) {
         type="number"
         placeholder="Amount"
         className="border p-1 rounded w-40"
+        autoComplete="off"
         value={item.amount}
         onChange={(e) => {
           const updated = [...oilItems];
@@ -564,6 +573,7 @@ if (expenseRows.length > 0) {
       <input
         type="number"
         className="border p-1 rounded w-40"
+        autoComplete="off"
         value={value}
         onChange={(e) =>
           setReceipts({ ...receipts, [key]: e.target.value })
@@ -587,6 +597,7 @@ if (expenseRows.length > 0) {
         type="text"
         placeholder="Particular"
         className="border p-1 rounded flex-1"
+        autoComplete="off"
         value={exp.particular}
         onChange={(e) => {
           const updated = [...expenses];
@@ -599,6 +610,7 @@ if (expenseRows.length > 0) {
         type="number"
         placeholder="Amount"
         className="border p-1 rounded w-40"
+        autoComplete="off"
         value={exp.amount}
         onChange={(e) => {
           const updated = [...expenses];
